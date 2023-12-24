@@ -78,12 +78,6 @@ class Game():
             self.won = True
         return (self.guesscount, " ".join(hint))
 
-def findall(astring, achar):
-    returnlist = []
-    for n, c in enumerate(astring):
-        if c == achar:
-            returnlist.append(n)
-    return returnlist
 
 if __name__ == '__main__':
     main()
