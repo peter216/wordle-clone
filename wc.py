@@ -18,6 +18,8 @@ def main():
             print(f"You got it in {guessnum}!")    
         print()
         playagain = input("Play again? ")
+        if not playagain:
+            playagain = "y"
         print()
 
 class Game():
@@ -41,11 +43,11 @@ class Game():
         for lnum, ltr in enumerate(ans):
             if ltr in glist:
                 if guess[lnum] == ltr:
-                    hint[lnum] = 'G'
+                    hint[lnum] = '🟢'
                 else:    
-                    hint[guess.index(ltr)] = 'Y'
+                    hint[guess.index(ltr)] = '🟡'
                 glist.remove(ltr)
-        if hint == ['G'] * 5:
+        if hint == ['🟢'] * 5:
             self.won = True
         return (self.guesscount, " ".join(hint))
 
