@@ -2,14 +2,23 @@
 import random
 
 def main():
-    newgame = Game()
-    while not newgame.won:
-        nextguess = input("Guess? ")
-        if nextguess == "qqqqq":
-            print(newgame.answer)
-            break
-        guessnum, nexthint = newgame.taketurn(nextguess)
-        print(f"{guessnum}: {nexthint}")
+    playagain = "y"
+    while playagain[0].lower() != "n":
+        newgame = Game()
+        over = False
+        while not (newgame.won or over):
+            nextguess = input("Guess? ")
+            if nextguess == "qqqqq":
+                print(f"It was {newgame.answer}")
+                over = True
+            else:
+                guessnum, nexthint = newgame.taketurn(nextguess)
+                print(f"{guessnum}: {nexthint}")
+        if newgame.won:
+            print(f"You got it in {guessnum}!")    
+        print()
+        playagain = input("Play again? ")
+        print()
 
 class Game():
 
@@ -27,15 +36,15 @@ class Game():
         if guess not in self.dictionary:
             return (self.guesscount, "invalid")
         self.guesscount += 1
-        gset = set(guess)
+        glist = list(guess)
         hint = ['_'] * 5
         for lnum, ltr in enumerate(ans):
-            if ltr in gset:
+            if ltr in glist:
                 if guess[lnum] == ltr:
                     hint[lnum] = 'G'
                 else:    
                     hint[guess.index(ltr)] = 'Y'
-                gset.remove(ltr)
+                glist.remove(ltr)
         if hint == ['G'] * 5:
             self.won = True
         return (self.guesscount, " ".join(hint))
