@@ -9,6 +9,7 @@ def main():
     print("pass on a word.")
     print()
     playagain = "y"
+    wordgame.guesscount = 0
     while playagain[0].lower() != "n":
         if playagain == "force":
             forceword = input("forceword? ")
@@ -17,17 +18,24 @@ def main():
             wordgame.new()
         over = False
         while not (wordgame.won or over):
-            nextguess = input("Guess? ")
-            if nextguess == "qqqqq":
+            if wordgame.guesscount < 6:
+                nextguess = input("Guess? ")
+            if nextguess == "qqqqq" or wordgame.guesscount == 6:
                 print(f"It was {wordgame.answer}")
                 over = True
             else:
-                guessnum, nexthint = wordgame.taketurn(nextguess)
-                print(f"{guessnum}: {nexthint}")
+                nexthint = wordgame.taketurn(nextguess)
+                gspaced = ''.join([f"{l:3}" for l in nextguess.upper()])
+                print()
+                print(f"Guess {wordgame.guesscount}")
+                print(nexthint)
+                print(gspaced)
+                #print(f" {gspaced}")
+                print()
         if wordgame.won:
-            print(f"You got it in {guessnum}!")    
+            print(f"You got it in {wordgame.guesscount}!")    
         print()
-        playagain = input("Play again? ")
+        playagain = input("Play again? ('n' to exit) ")
         if not playagain:
             playagain = "y"
         print()
@@ -52,10 +60,10 @@ class Game():
         ans = self.answer
         guess = guess.lower()
         if guess not in self.dictionary:
-            return (self.guesscount, "invalid")
+            return ("invalid")
         self.guesscount += 1
         gans = list(ans)
-        hint = ['⬜️'] * 5
+        hint = ['⬛️'] * 5
         cpos = []
         wpos = []
         lans = list(ans)
@@ -76,7 +84,7 @@ class Game():
                 hint[x] = "🟨"
         if hint == ['🟩'] * 5:
             self.won = True
-        return (self.guesscount, " ".join(hint))
+        return " ".join(hint)
 
 
 if __name__ == '__main__':
