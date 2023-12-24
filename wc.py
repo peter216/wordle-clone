@@ -55,7 +55,7 @@ class Game():
             return (self.guesscount, "invalid")
         self.guesscount += 1
         gans = list(ans)
-        hint = ['_'] * 5
+        hint = ['⬜️'] * 5
         cpos = []
         wpos = []
         lans = list(ans)
@@ -71,10 +71,10 @@ class Game():
                 lans.remove(guess[x])
         for x in range(5):
             if x in cpos:
-                hint[x] = "🟢"
+                hint[x] = "🟩"
             elif x in wpos:
-                hint[x] = "🟡"
-        if hint == ['🟢'] * 5:
+                hint[x] = "🟨"
+        if hint == ['🟩'] * 5:
             self.won = True
         return (self.guesscount, " ".join(hint))
 
