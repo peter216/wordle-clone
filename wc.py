@@ -5,8 +5,7 @@ def main():
     wordgame = Game()
     print()
     print("Welcome to my Wordle clone.")
-    print("Use the sequence 'qqqqq' to")
-    print("pass on a word.")
+    print("Type 'pass' to pass on a word.")
     print()
     playagain = "y"
     wordgame.guesscount = 0
@@ -20,8 +19,8 @@ def main():
         while not (wordgame.won or over):
             if wordgame.guesscount < 6:
                 nextguess = input("Guess? ")
-            if nextguess == "qqqqq" or wordgame.guesscount == 6:
-                print(f"It was {wordgame.answer}")
+            if nextguess == "pass" or wordgame.guesscount == 6:
+                print(f"It was {wordgame.answer}.")
                 over = True
             else:
                 nexthint = wordgame.taketurn(nextguess)
