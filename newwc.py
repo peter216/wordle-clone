@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 import random
+import string
 
 def main():
     wordgame = Game()
     print()
     print("Welcome to my Wordle clone.")
-    print("Type 'pass' to pass on a word.")
     print()
     playagain = "y"
     wordgame.guesscount = 0
@@ -15,6 +15,10 @@ def main():
             wordgame.new(forceword)
         else:
             wordgame.new()
+            print("Type 'pass' to pass on a word.")
+            # print("Type 'view' to view all guesses.")
+            # print("Type 'used' to see used and unused letters.")
+            print()
         over = False
         while not (wordgame.won or over):
             if wordgame.guesscount < 6:
@@ -23,14 +27,18 @@ def main():
                 print(f"It was {wordgame.answer}.")
                 over = True
             else:
-                nexthint = wordgame.taketurn(nextguess)
-                gspaced = ''.join([f"{l:3}" for l in nextguess.upper()])
                 print()
-                print(f"Guess {wordgame.guesscount}")
-                print(nexthint)
-                print(gspaced)
-                #print(f" {gspaced}")
-                print()
+                print("   Guesses so far")
+                print("   --------------")
+                print()    
+                print("Used letters")
+                print("--------------")
+                print(" ".join(sorted([l.upper() for l in wordgame.picked])))
+                print()    
+                print("Unused letters")
+                print("--------------")
+                print(" ".join(sorted([l.upper() for l in wordgame.unpicked])))
+                print()    
         if wordgame.won:
             print(f"You got it in {wordgame.guesscount}!")    
         print()
@@ -54,6 +62,9 @@ class Game():
             self.answer = random.choice(self.wordbank)
         self.won = False
         self.guesscount = 0
+        self.guesses = []
+        self.picked = set()
+        self.unpicked = set(string.ascii_lowercase)
 
     def taketurn(self, guess):
         ans = self.answer
@@ -61,6 +72,10 @@ class Game():
         if guess not in self.dictionary:
             return ("invalid")
         self.guesscount += 1
+        for letter in guess:
+            self.picked.add(letter)
+            if letter in self.unpicked:
+                self.unpicked.remove(letter)
         gans = list(ans)
         hint = ['⬛️'] * 5
         cpos = []
@@ -83,7 +98,9 @@ class Game():
                 hint[x] = "🟨"
         if hint == ['🟩'] * 5:
             self.won = True
-        return " ".join(hint)
+        jhint = " ".join(hint)
+        self.guesses.append((self.guesscount, guess, jhint))
+        return jhint
 
 
 if __name__ == '__main__':
