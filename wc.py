@@ -27,14 +27,13 @@ def main():
                 print(f"It was {wordgame.answer}.")
                 over = True
             else:
+                wordgame.taketurn(nextguess)
                 print()
-                print("   Guesses so far")
-                print("   --------------")
-                print()    
-                print("Used letters")
-                print("--------------")
-                print(" ".join(sorted([l.upper() for l in wordgame.picked])))
-                print()    
+                for count, guess, hint in wordgame.guesses:
+                    gspaced = ''.join([f"{l:3}" for l in guess.upper()])
+                    print(f"{count}: {gspaced}")
+                    print(f"   {hint}")
+                print()
                 print("Unused letters")
                 print("--------------")
                 print(" ".join(sorted([l.upper() for l in wordgame.unpicked])))
@@ -100,7 +99,6 @@ class Game():
             self.won = True
         jhint = " ".join(hint)
         self.guesses.append((self.guesscount, guess, jhint))
-        return jhint
 
 
 if __name__ == '__main__':
