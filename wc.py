@@ -8,13 +8,24 @@ def main():
     print("Welcome to my Wordle clone.")
     print()
     playagain = "y"
+    mode = "regular"
     wordgame.guesscount = 0
+    print("Hardmode is OFF")
+    print("Type 'hard' to enter or exit hardmode.")
+    playagain = input("Start new game? ('n' to exit) ")
     while playagain[0].lower() != "n":
+        if playagain == "hard":
+            if mode == "regular":
+                print("Entering hardmode")
+                mode = "hard"
+            else:
+                print("Exiting hardmode")
+                mode = "regular"
         if playagain == "force":
             forceword = input("forceword? ")
-            wordgame.new(forceword)
+            wordgame.new(forceword, hardmode=mode)
         else:
-            wordgame.new()
+            wordgame.new(hardmode=mode)
             print("Type 'pass' to pass on a word.")
             # print("Type 'view' to view all guesses.")
             # print("Type 'used' to see used and unused letters.")
@@ -42,6 +53,11 @@ def main():
         if wordgame.won:
             print(f"You got it in {wordgame.guesscount}!")    
         print()
+        if mode == "regular":
+            print("Hardmode is OFF")
+        else:
+            print("Hardmode is ON")
+        print("Type 'hard' to enter or exit hardmode.")
         playagain = input("Play again? ('n' to exit) ")
         if not playagain:
             playagain = "y"
@@ -55,7 +71,7 @@ class Game():
         with open("valid-words.csv") as IFH:
             self.dictionary = [w.strip() for w in IFH.readlines()]
 
-    def new(self, force=None):
+    def new(self, force=None, hardmode="regular"):
         if force:
             self.answer = force
         else:
@@ -65,6 +81,11 @@ class Game():
         self.guesses = []
         self.picked = set()
         self.unpicked = set(string.ascii_lowercase)
+        if hardmode == "hard":
+            self.hardmode = True
+        else:
+            self.hardmode = False
+        self.prevcpos = {}
 
     def taketurn(self, guess):
         ans = self.answer
@@ -73,6 +94,12 @@ class Game():
             print()
             print("*** invalid ***")
             return
+        if self.hardmode:
+            for pos, ltr in self.prevcpos.items():
+                if ltr != guess[pos]:
+                    print()
+                    print("*** invalid for hardmode ***")
+                    return
         self.guesscount += 1
         for letter in guess:
             self.picked.add(letter)
@@ -86,6 +113,7 @@ class Game():
         for x in range(5):
             if guess[x] == ans[x]:
                 cpos.append(x)
+                self.prevcpos[x] = guess[x]
                 lans.remove(guess[x])
         for x in range(5):
             if x in cpos:
