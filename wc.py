@@ -86,6 +86,7 @@ class Game():
         else:
             self.hardmode = False
         self.prevcpos = {}
+        self.prevlet = []
 
     def taketurn(self, guess):
         ans = self.answer
@@ -100,6 +101,13 @@ class Game():
                     print()
                     print("*** invalid for hardmode ***")
                     return
+            lguess = list(guess)
+            for ltr in self.prevlet:
+                if ltr not in lguess:
+                    print()
+                    print("*** invalid for hardmode ***")
+                    return
+                lguess.remove(ltr)
         self.guesscount += 1
         for letter in guess:
             self.picked.add(letter)
@@ -110,6 +118,8 @@ class Game():
         cpos = []
         wpos = []
         lans = list(ans)
+        self.prevcpos = {}
+        self.prevlet = []
         for x in range(5):
             if guess[x] == ans[x]:
                 cpos.append(x)
@@ -120,6 +130,7 @@ class Game():
                 continue
             elif guess[x] in lans:
                 wpos.append(x)
+                self.prevlet.append(guess[x])
                 lans.remove(guess[x])
         for x in range(5):
             if x in cpos:
