@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 import random
 import string
+import os
 
 def main():
+    callingdir = os.getcwd()
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
     wordgame = Game()
     print()
     print("Welcome to my Wordle clone.")
@@ -62,6 +65,7 @@ def main():
         if not playagain:
             playagain = "y"
         print()
+    os.chdir(callingdir)
 
 class Game():
 
