@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 import random
 import string
+import os
 
 def main():
+
     wordgame = Game()
     print()
     print("Welcome to my Wordle clone.")
@@ -66,9 +68,11 @@ def main():
 class Game():
 
     def __init__(self):
-        with open("word-bank.csv") as IFH:
+        # if __file__ is a symbolic link, resolve it to the actual file
+        fdir = os.path.dirname(os.path.realpath(__file__))
+        with open(f"{fdir}/word-bank.csv") as IFH:
             self.wordbank = [w.strip() for w in IFH.readlines()]
-        with open("valid-words.csv") as IFH:
+        with open(f"{fdir}/valid-words.csv") as IFH:
             self.dictionary = [w.strip() for w in IFH.readlines()]
 
     def new(self, force=None, hardmode="regular"):
