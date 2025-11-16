@@ -1,4 +1,26 @@
 #!/usr/bin/env python3
+"""
+A simple Wordle clone in the terminal.
+
+Usage: python3 wc.py
+
+Controls:
+- Type your 5-letter guess and press Enter.
+- Type 'pass' to forfeit the current game.
+- Type 'hard' to toggle hardmode.
+- Reply 'n' to exit the game when prompted to start a new game or play again.
+
+Author: @peter216
+Date: June 2024
+
+Requirements:
+- Python 3.x
+
+Files needed:
+- word-bank.csv : A CSV file containing valid answer words (one per line).
+- valid-words.csv : A CSV file containing all valid guess words (one per line).
+
+"""
 import random
 import string
 import os
